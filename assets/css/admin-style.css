@@ -1,0 +1,246 @@
+/**
+ * Azad News Photo Card - Admin Settings CSS
+ */
+
+.azad-admin-wrap {
+  margin: 20px 20px 0 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Header */
+.azad-admin-header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  padding: 24px 30px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.azad-header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.azad-header-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.azad-header-icon .dashicons {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: #38bdf8;
+}
+
+.azad-admin-header h1 {
+  color: #ffffff;
+  font-size: 24px;
+  margin: 0 0 6px 0;
+  font-weight: 700;
+}
+
+.azad-subtitle {
+  color: #94a3b8;
+  margin: 0;
+  font-size: 14px;
+}
+
+.azad-subtitle a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+.azad-header-badge span {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+/* Layout */
+.azad-admin-layout {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  gap: 24px;
+  align-items: start;
+}
+
+.azad-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.azad-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 17px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+/* Tabs */
+.azad-nav-tabs {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.azad-nav-tabs .nav-tab {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-bottom: none;
+  font-weight: 600;
+  padding: 10px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 8px 8px 0 0;
+  margin-right: 4px;
+}
+
+.azad-nav-tabs .nav-tab-active {
+  background: #ffffff;
+  border-color: #0284c7;
+  border-bottom-color: #ffffff;
+  color: #0284c7;
+}
+
+.azad-tab-content {
+  display: none;
+}
+
+.azad-tab-content.azad-tab-active {
+  display: block;
+}
+
+/* Form Controls */
+.azad-form-group {
+  margin-bottom: 20px;
+}
+
+.azad-form-group label {
+  display: block;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.azad-row {
+  display: flex;
+  gap: 16px;
+}
+
+.azad-col {
+  flex: 1;
+}
+
+.azad-media-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.azad-media-input-group input {
+  flex: 1;
+}
+
+.azad-upload-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+}
+
+.azad-preview-box {
+  margin-top: 10px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 12px;
+  display: inline-block;
+}
+
+.azad-slider-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.azad-range-slider {
+  width: 220px;
+}
+
+.azad-checkbox-list label {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* Sticky Preview Container */
+.azad-sticky-preview {
+  position: sticky;
+  top: 40px;
+}
+
+.azad-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.azad-admin-card-stage {
+  margin: 18px 0;
+  display: flex;
+  justify-content: center;
+  background: #f1f5f9;
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+/* Scale down the 600x600 preview to fit admin side column */
+.azad-admin-card-stage .azad-photocard-container {
+  transform: scale(0.62);
+  transform-origin: top center;
+  margin-bottom: -220px;
+}
+
+.azad-admin-preview-actions {
+  margin-top: 20px;
+}
+
+.azad-admin-download-btn {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  height: 42px !important;
+  line-height: 40px !important;
+}
+
+.azad-submit-bar {
+  margin-top: 10px;
+}
+
+@media (max-width: 1100px) {
+  .azad-admin-layout {
+    grid-template-columns: 1fr;
+  }
+}

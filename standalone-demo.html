@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Azad News 24 - Photo Card Generator Demo</title>
+  
+  <!-- Google Bengali Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;700;800&family=Hind+Siliguri:wght@400;500;600;700;800&family=Noto+Serif+Bengali:wght@600;700;900&family=Tiro+Bangla&display=swap" rel="stylesheet">
+  
+  <!-- Plugin CSS -->
+  <link rel="stylesheet" href="assets/css/templates.css">
+  <link rel="stylesheet" href="assets/css/frontend-style.css">
+  <link rel="stylesheet" href="assets/css/admin-style.css">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f5f9;
+      font-family: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #1e293b;
+    }
+
+    .demo-navbar {
+      background: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .demo-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .demo-brand-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #991b1b;
+      margin: 0;
+    }
+
+    .demo-brand-name span {
+      color: #111827;
+    }
+
+    .demo-nav-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .demo-toggle-btn {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .demo-toggle-btn:hover {
+      background: #0369a1;
+    }
+
+    .demo-toggle-btn.admin-view {
+      background: #334155;
+    }
+
+    /* Single Post Mock Container */
+    .demo-post-container {
+      max-width: 860px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 36px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .demo-post-meta {
+      display: flex;
+      gap: 16px;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .demo-post-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .demo-post-title {
+      font-size: 30px;
+      line-height: 1.35;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 20px 0;
+    }
+
+    .demo-featured-image {
+      width: 100%;
+      height: 420px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: #1e293b;
+    }
+
+    .demo-featured-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .demo-post-content {
+      font-size: 17px;
+      line-height: 1.8;
+      color: #334155;
+      margin-top: 20px;
+    }
+
+    .demo-post-content p {
+      margin-bottom: 18px;
+    }
+
+    #admin_view_container {
+      display: none;
+      max-width: 1280px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Demo Header Bar -->
+  <header class="demo-navbar">
+    <div class="demo-brand">
+      <h1 class="demo-brand-name">আজাদ নিউজ<span>২৪</span> <small style="font-size: 12px; color: #64748b; font-weight: normal; margin-left: 8px;">Photo Card Generator</small></h1>
+    </div>
+    <div class="demo-nav-actions">
+      <button type="button" class="demo-toggle-btn" id="btn_toggle_view">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        <span>ওয়ার্ডপ্রেস এডমিন সেটিংস দেখুন</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       1. FRONTEND SINGLE POST VIEW
+       ========================================================================= -->
+  <main id="frontend_view_container">
+    <article class="demo-post-container">
+      <div class="demo-post-meta">
+        <span>📅 ১১ জুলাই ২০২৬</span>
+        <span>✍️ কক্সবাজার প্রতিনিধি:</span>
+        <span>🏷️ জাতীয় সংবাদ</span>
+      </div>
+
+      <h1 class="demo-post-title" id="demo_post_title_el">কক্সবাজারে এখনো পানির নিচে ১৫০ গ্রাম, তিন লাখের বেশি মানুষ পানিবন্দি</h1>
+
+      <!-- Post Featured Image -->
+      <div class="demo-featured-image post-thumbnail">
+        <img id="demo_post_img_el" class="wp-post-image" src="assets/images/sample-flood.jpg" alt="Flooding in Cox's Bazar" />
+      </div>
+
+      <!-- Single Post Photo Card Button Trigger: Directly Beneath Featured Image -->
+      <div class="azad-photo-card-trigger-wrapper">
+        <button type="button" class="azad-photo-card-btn" id="azad_open_photocard_btn">
+          <svg class="azad-btn-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+          </svg>
+          <span>Photo Card</span>
+        </button>
+      </div>
+
+      <div class="demo-post-content">
+        <p>টানা বৃষ্টি ও উজান থেকে নেমে আসা পাহাড়ি ঢলে কক্সবাজারের চকরিয়া, পেকুয়া, রামু ও সদর উপজেলার বিস্তীর্ণ এলাকা প্লাবিত হয়েছে। এতে এখনো অন্তত দেড় শতাধিক গ্রাম পানির নিচে রয়েছে। পানিবন্দি হয়ে পড়েছেন তিন লাখেরও বেশি মানুষ।</p>
+        <p>স্থানীয় প্রশাসন ও জনপ্রতিনিধিদের সূত্রে জানা গেছে, বন্যাকবলিত এলাকার অধিকাংশ গ্রামীণ সড়ক পানির নিচে তলিয়ে যাওয়ায় যোগাযোগ ব্যবস্থা বিচ্ছিন্ন হয়ে পড়েছে। বিভিন্ন স্থানে মানুষের বাড়িঘরে পানি প্রবেশ করায় চরম মানবিক বিপর্যয় দেখা দিয়েছে।</p>
+      </div>
+    </article>
+  </main>
+
+  <!-- =========================================================================
+       2. MODAL POPUP (Identical to WordPress Plugin Output)
+       ========================================================================= -->
+  <div id="azad_photo_card_modal" class="azad-modal-overlay" style="display: none;" aria-hidden="true" role="dialog">
+    <div class="azad-modal-backdrop"></div>
+    <div class="azad-modal-dialog">
+      <!-- Header -->
+      <div class="azad-modal-header">
+        <h2 class="azad-modal-title">Photo Card Preview</h2>
+        <button type="button" class="azad-modal-close" id="azad_close_modal_btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Body: 2 Columns (Preview on Left, Customize on Right) -->
+      <div class="azad-modal-body">
+        <!-- Left: Live Photo Card Preview Container -->
+        <div class="azad-preview-area">
+          <div class="azad-card-wrapper" id="azad_card_export_target">
+            <div id="azad_photocard_element" class="azad-photocard-container">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Customize Panel (Matching Reference Image 2) -->
+        <div class="azad-controls-area">
+          <div class="azad-customize-panel">
+            <h3 class="azad-panel-title">Customize</h3>
+
+            <!-- Title Font Size Slider -->
+            <div class="azad-control-group">
+              <div class="azad-control-header">
+                <label class="azad-label" for="azad_slider_title_size">Title Font Size</label>
+                <span class="azad-val-badge" id="val_title_size">27px</span>
+              </div>
+              <div class="azad-slider-track-wrap">
+                <input type="range" id="azad_slider_title_size" class="azad-range-input" min="18" max="42" step="1" value="27" />
+              </div>
+            </div>
+
+            <!-- Line Height Slider -->
+            <div class="azad-control-group">
+              <div class="azad-control-header">
+                <label class="azad-label" for="azad_slider_line_height">Line Height</label>
+                <span class="azad-val-badge" id="val_line_height">1.35</span>
+              </div>
+              <div class="azad-slider-track-wrap">
+                <input type="range" id="azad_slider_line_height" class="azad-range-input" min="1.05" max="1.90" step="0.05" value="1.35" />
+              </div>
+            </div>
+
+            <!-- Bottom Text Font Size Slider -->
+            <div class="azad-control-group">
+              <div class="azad-control-header">
+                <label class="azad-label" for="azad_slider_bottom_size">Bottom Text Font Size</label>
+                <span class="azad-val-badge" id="val_bottom_size">22px</span>
+              </div>
+              <div class="azad-slider-track-wrap">
+                <input type="range" id="azad_slider_bottom_size" class="azad-range-input" min="14" max="30" step="1" value="22" />
+              </div>
+            </div>
+
+            <!-- Quick Edit Accordion -->
+            <div class="azad-quick-edit-accordion">
+              <button type="button" class="azad-accordion-toggle" id="azad_toggle_quick_edit">
+                <span>টেক্সট ও রিপোর্টার সম্পাদনা</span>
+                <span class="azad-chevron">▼</span>
+              </button>
+              <div class="azad-accordion-body" id="azad_quick_edit_fields" style="display: none;">
+                <div class="azad-form-field">
+                  <label>পোস্ট শিরোনাম (Title):</label>
+                  <textarea id="azad_input_custom_title" rows="2" class="azad-input-text"></textarea>
+                </div>
+                <div class="azad-form-field">
+                  <label>প্রতিবেদক (Reporter):</label>
+                  <input type="text" id="azad_input_custom_reporter" class="azad-input-text" />
+                </div>
+                <div class="azad-form-field">
+                  <label>তারিখ (Date):</label>
+                  <input type="text" id="azad_input_custom_date" class="azad-input-text" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Download Button -->
+            <div class="azad-action-wrap">
+              <button type="button" class="azad-download-card-btn" id="azad_download_card_btn">
+                <span class="azad-btn-spinner" style="display: none;"></span>
+                <span class="azad-btn-text">Download Photo Card</span>
+              </button>
+            </div>
+
+            <!-- Helper Notice Text -->
+            <div class="azad-helper-notice">
+              <p>Font size ও line height পরিবর্তন করে <strong>Download Photo Card</strong> চাপুন। Featured image না থাকলে আগে post এ featured image দিন।</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       3. WORDPRESS ADMIN SETTINGS VIEW (Interactive Demo)
+       ========================================================================= -->
+  <div id="admin_view_container">
+    <div class="wrap azad-admin-wrap">
+      <div class="azad-admin-header">
+        <div class="azad-header-left">
+          <div class="azad-header-icon">
+            <svg width="28" height="28" fill="#38bdf8" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+          </div>
+          <div>
+            <h1>Azad News Photo Card সেটিংস ড্যাশবোর্ড</h1>
+            <p class="azad-subtitle">সোশ্যাল মিডিয়া ফটো কার্ড অটোমেশন ও ব্র্যান্ডিং সেটিংস &bull; azadnews-24.com</p>
+          </div>
+        </div>
+        <div class="azad-header-badge">
+          <span>v1.0.0</span>
+        </div>
+      </div>
+
+      <div class="azad-admin-layout">
+        <!-- Settings Column -->
+        <div class="azad-settings-column">
+          <nav class="nav-tab-wrapper azad-nav-tabs">
+            <a href="#tab-branding" class="nav-tab nav-tab-active" data-tab="tab-branding">ব্র্যান্ডিং ও লোগো</a>
+            <a href="#tab-typography" class="nav-tab" data-tab="tab-typography">টাইপোগ্রাফি ও ডিফল্ট</a>
+            <a href="#tab-display" class="nav-tab" data-tab="tab-display">ডিসপ্লে ও পারমিশন</a>
+          </nav>
+
+          <div id="tab-branding" class="azad-tab-content azad-tab-active">
+            <div class="azad-card">
+              <h3>১. ব্র্যান্ডিং ও লোগো আইকন</h3>
+              <div class="azad-form-group">
+                <label>বৃত্তাকার আইকন (Logo Icon):</label>
+                <div class="azad-preview-box small">
+                  <img src="assets/images/logo-icon.svg" id="azad_logo_icon_preview" alt="Icon Preview" style="max-height: 44px; border-radius: 50%;" />
+                </div>
+              </div>
+
+              <div class="azad-form-group">
+                <label>ফুটার টেক্সট:</label>
+                <input type="text" id="azad_footer_text" value="আজাদ নিউজ ২৪ | www.azadnews-24.com" style="width: 100%; padding: 6px;" />
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-typography" class="azad-tab-content">
+            <div class="azad-card">
+              <h3>২. টাইপোগ্রাফি ও ডিফল্ট সেটিংস</h3>
+              <div class="azad-form-group">
+                <label>ডিফল্ট টাইটেল ফন্ট সাইজ: <span id="admin_val_title">27px</span></label>
+                <input type="range" min="18" max="42" value="27" id="range_title_size" style="width: 100%;" />
+              </div>
+
+              <div class="azad-form-group">
+                <label>ডিফল্ট লাইন হাইট: <span id="admin_val_line">1.35</span></label>
+                <input type="range" min="1.05" max="1.90" step="0.05" value="1.35" id="range_line_height" style="width: 100%;" />
+              </div>
+
+              <div class="azad-form-group">
+                <label>ডিফল্ট বটম ব্যাজ টেক্সট:</label>
+                <input type="text" id="azad_default_bottom_badge" value="বিস্তারিত কমেন্টে" style="width: 100%; padding: 6px;" />
+              </div>
+            </div>
+          </div>
+
+          <div id="tab-display" class="azad-tab-content">
+            <div class="azad-card">
+              <h3>৩. ডিসপ্লে ও পারমিশন</h3>
+              <div class="azad-form-group">
+                <label>বাটন পজিশন:</label>
+                <select style="width: 100%; padding: 6px;">
+                  <option selected>ফিচার্ড ইমেজের ঠিক নিচে (Below Featured Image - Recommended)</option>
+                  <option>পোস্ট কনটেন্টের শেষে (After Post Content)</option>
+                  <option>পোস্ট কনটেন্টের শুরুতে (Before Post Content)</option>
+                  <option>পোস্ট টাইটেলের নিচে (Below Title)</option>
+                  <option>শুধুমাত্র শর্টকোড মাধ্যমে ([azad_photo_card])</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Live Preview Column -->
+        <div class="azad-preview-column">
+          <div class="azad-card azad-sticky-preview">
+            <div class="azad-preview-header">
+              <h3>লাইভ ফটো কার্ড প্রিভিউ</h3>
+              <button type="button" class="button" id="azad_admin_refresh_preview" style="padding: 4px 10px; cursor: pointer;">রিফ্রেশ</button>
+            </div>
+            <div class="azad-admin-card-stage" id="azad_admin_card_container">
+              <!-- Admin card preview -->
+            </div>
+            <div class="azad-admin-preview-actions">
+              <button type="button" class="azad-download-card-btn" id="azad_admin_download_btn" style="border-radius: 8px;">
+                <span>টেস্ট ফটো কার্ড ডাউনলোড করুন</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery & html2canvas Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="assets/js/html2canvas.min.js"></script>
+
+  <script>
+    // Demo Post Data
+    window.azadPhotoCardData = {
+      postId: 101,
+      postTitle: "কক্সবাজারে এখনো পানির নিচে ১৫০ গ্রাম, তিন লাখের বেশি মানুষ পানিবন্দি",
+      postImage: "assets/images/sample-flood.jpg",
+      postDate: "১১ জুলাই ২০২৬",
+      reporterText: "কক্সবাজার প্রতিনিধি:",
+      buttonPosition: "below_featured_image",
+      options: {
+        default_title_size: 27,
+        default_line_height: 1.35,
+        default_bottom_size: 20,
+        default_bottom_badge: "বিস্তারিত কমেন্টে",
+        footer_text: "আজাদ নিউজ ২৪ |",
+        logo_icon_url: "assets/images/logo-icon.svg",
+        button_position: "below_featured_image",
+        export_scale: 2
+      }
+    };
+
+    window.azadPhotoCardAdmin = {
+      options: window.azadPhotoCardData.options,
+      bengaliDate: "১১ জুলাই ২০২৬"
+    };
+
+    // Toggle Frontend / Admin demo view
+    $('#btn_toggle_view').on('click', function() {
+      var isFrontend = $('#frontend_view_container').is(':visible');
+      if (isFrontend) {
+        $('#frontend_view_container').hide();
+        $('#admin_view_container').show();
+        $(this).addClass('admin-view').find('span').text('ফ্রন্টএন্ড পোস্ট ভিউ দেখুন');
+      } else {
+        $('#admin_view_container').hide();
+        $('#frontend_view_container').show();
+        $(this).removeClass('admin-view').find('span').text('ওয়ার্ডপ্রেস এডমিন সেটিংস দেখুন');
+      }
+    });
+  </script>
+
+  <!-- Main Plugin JS -->
+  <script src="assets/js/photo-card.js"></script>
+  <script src="assets/js/admin-script.js"></script>
+
+</body>
+</html>

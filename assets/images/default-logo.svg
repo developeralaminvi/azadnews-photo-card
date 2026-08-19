@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@600;700;800&amp;display=swap');
+      .tagline { font-family: 'Hind Siliguri', sans-serif; font-size: 13px; fill: #444444; font-weight: 600; }
+      .brand-main { font-family: 'Hind Siliguri', sans-serif; font-size: 32px; fill: #111111; font-weight: 800; }
+      .brand-red { fill: #c00d1e; }
+      .domain { font-family: 'Hind Siliguri', sans-serif; font-size: 12px; fill: #555555; font-weight: 700; letter-spacing: 0.5px; }
+    </style>
+  </defs>
+  <!-- Tagline -->
+  <text x="10" y="16" class="tagline">সত্যের সাথে প্রতিদিন</text>
+  <!-- Brand Name -->
+  <text x="10" y="52" class="brand-main">আজাদ নিউজ<tspan class="brand-red">২৪</tspan></text>
+  <!-- Domain -->
+  <text x="12" y="72" class="domain">www.Azadnews-24.com</text>
+</svg>

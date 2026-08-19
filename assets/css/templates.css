@@ -1,0 +1,213 @@
+/**
+ * Azad News Photo Card - Card Templates CSS
+ * Standard 1:1 Aspect Ratio (600px x 600px base, exported at 1200px x 1200px Ultra HD)
+ */
+
+:root {
+  --azad-title-size: 27px;
+  --azad-line-height: 1.35;
+  --azad-bottom-size: 20px;
+  --azad-font-family: 'Hind Siliguri', 'Noto Serif Bengali', 'SolaimanLipi', sans-serif;
+}
+
+/* Base 1:1 Photo Card Container */
+.azad-photocard-container {
+  width: 600px;
+  height: 600px;
+  min-width: 600px;
+  min-height: 600px;
+  max-width: 600px;
+  max-height: 600px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: var(--azad-font-family);
+  user-select: none;
+  background-color: #0b1e4f;
+  background-image: url('../images/card-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  padding: 0;
+}
+
+/* ==========================================================================
+   TOP DATE BAR / PILL
+   ========================================================================== */
+.azad-card-top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  z-index: 5;
+  padding-top: 0;
+}
+
+.azad-date-pill {
+  background: #ffffff;
+  color: #111827;
+  font-family: var(--azad-font-family);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 3px 26px 4px 26px;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.3px;
+  line-height: 1.25;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   FEATURED IMAGE FRAME
+   ========================================================================== */
+.azad-card-image-section {
+  padding: 8px 24px 0 24px;
+  position: relative;
+  z-index: 5;
+}
+
+.azad-image-frame {
+  width: 100%;
+  height: 275px;
+  border-radius: 16px;
+  border: 3px solid #ffcc00;
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.95), 0 8px 22px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  background: #0f172a;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.azad-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ==========================================================================
+   HEADLINE / TITLE SECTION
+   ========================================================================== */
+.azad-card-title-section {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding: 8px 20px 4px 20px;
+  margin-top: 2px;
+}
+
+.azad-card-title {
+  color: #ffffff;
+  font-family: var(--azad-font-family);
+  font-size: var(--azad-title-size);
+  line-height: var(--azad-line-height);
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9), 0 0 2px #000000;
+  word-break: break-word;
+}
+
+.azad-card-title .highlight-yellow {
+  color: #ffde00;
+}
+
+/* ==========================================================================
+   BOTTOM BAR (REPORTER + BLUE COMMENT BADGE)
+   ========================================================================== */
+.azad-card-bottom-bar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px 4px 28px;
+}
+
+.azad-reporter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.azad-logo-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #000000;
+  border: 2px solid #ffde00;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.azad-logo-icon-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.azad-logo-icon-circle .azad-icon-text {
+  font-family: var(--azad-font-family);
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.azad-reporter-name {
+  color: #ffffff;
+  font-family: var(--azad-font-family);
+  font-size: var(--azad-bottom-size);
+  font-weight: 700;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  white-space: nowrap;
+}
+
+/* Glossy Blue Comment Badge */
+.azad-comment-badge-btn {
+  background: linear-gradient(180deg, #104899 0%, #072a6b 100%);
+  border: 1.5px solid #2563eb;
+  color: #ffde00;
+  font-family: var(--azad-font-family);
+  font-size: 21px;
+  font-weight: 700;
+  padding: 6px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 14px rgba(37, 99, 235, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   BOTTOM FOOTER BAR
+   ========================================================================== */
+.azad-card-footer-bar {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+  z-index: 5;
+  padding-bottom: 0;
+}
+
+.azad-footer-pill {
+  background: #ffffff;
+  color: #111827;
+  font-family: var(--azad-font-family);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 2px 28px;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.2px;
+}

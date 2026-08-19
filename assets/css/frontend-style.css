@@ -1,0 +1,425 @@
+/**
+ * Azad News Photo Card - Frontend Modal & Controls CSS
+ */
+
+/* ==========================================================================
+   TRIGGER BUTTON ON SINGLE POST
+   ========================================================================== */
+.azad-photo-card-trigger-wrapper {
+  margin: 18px 0 24px 0;
+  display: flex;
+  align-items: center;
+  clear: both;
+}
+
+.azad-photo-card-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #0e8a38 0%, #086627 100%);
+  color: #ffffff !important;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 11px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(14, 138, 56, 0.35);
+  transition: all 0.25s ease;
+  text-decoration: none;
+  line-height: 1;
+}
+
+.azad-photo-card-btn:hover {
+  background: linear-gradient(135deg, #119f41 0%, #0a7a30 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(14, 138, 56, 0.45);
+}
+
+.azad-photo-card-btn:active {
+  transform: translateY(0);
+}
+
+.azad-photo-card-btn .azad-btn-icon {
+  fill: #ffffff;
+}
+
+/* ==========================================================================
+   MODAL OVERLAY & CONTAINER (Matching Image 2 & 3)
+   ========================================================================== */
+.azad-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, 'Hind Siliguri', sans-serif;
+}
+
+.azad-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.azad-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+}
+
+.azad-modal-dialog {
+  position: relative;
+  z-index: 10;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  width: 100%;
+  max-width: 1020px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: azadModalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes azadModalSlideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Modal Header */
+.azad-modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid #eef2f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+}
+
+.azad-modal-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.azad-modal-close {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.azad-modal-close:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Modal Body */
+.azad-modal-body {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  overflow-y: auto;
+  align-items: start;
+  background: #f8fafc;
+}
+
+/* Left: Preview Area */
+.azad-preview-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.azad-card-wrapper {
+  transform-origin: top center;
+  display: flex;
+  justify-content: center;
+}
+
+/* Right: Customize Panel (Image 2 & 3) */
+.azad-controls-area {
+  width: 100%;
+}
+
+.azad-customize-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.azad-panel-title {
+  margin: 0 0 18px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+}
+
+/* Control Group & Sliders */
+.azad-control-group {
+  margin-bottom: 18px;
+}
+
+.azad-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.azad-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.azad-val-badge {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+}
+
+.azad-slider-track-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Sleek Blue Range Input */
+.azad-range-input {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  outline: none;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.azad-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0070f3;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 112, 243, 0.4);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.azad-range-input::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #0056b3;
+}
+
+.azad-range-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0070f3;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 112, 243, 0.4);
+}
+
+/* Quick Edit Accordion */
+.azad-quick-edit-accordion {
+  margin: 16px 0 20px 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.azad-accordion-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border: none;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  text-align: left;
+}
+
+.azad-accordion-body {
+  padding: 12px 14px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.azad-form-field {
+  margin-bottom: 10px;
+}
+
+.azad-form-field label {
+  display: block;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.azad-input-text {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.azad-input-text:focus {
+  border-color: #0284c7;
+  outline: none;
+}
+
+/* Download Photo Card Button */
+.azad-download-card-btn {
+  width: 100%;
+  background: #0f8a3c;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(15, 138, 60, 0.35);
+  transition: all 0.25s ease;
+}
+
+.azad-download-card-btn:hover {
+  background: #0d7834;
+  box-shadow: 0 6px 18px rgba(15, 138, 60, 0.45);
+  transform: translateY(-1px);
+}
+
+.azad-download-card-btn:active {
+  transform: translateY(0);
+}
+
+.azad-download-card-btn.loading {
+  background: #64748b;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.azad-btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: azadSpin 0.8s linear infinite;
+}
+
+@keyframes azadSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Helper Notice Text */
+.azad-helper-notice {
+  margin-top: 16px;
+}
+
+.azad-helper-notice p {
+  margin: 0;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.azad-helper-notice strong {
+  color: #334155;
+}
+
+/* ==========================================================================
+   RESPONSIVE MODAL MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 960px) {
+  .azad-modal-body {
+    grid-template-columns: 1fr;
+  }
+  .azad-modal-dialog {
+    max-height: 96vh;
+  }
+  .azad-preview-area {
+    padding: 10px;
+    overflow-x: auto;
+  }
+  .azad-card-wrapper {
+    transform: scale(0.8);
+    transform-origin: top center;
+    margin-bottom: -100px;
+  }
+}
+
+@media (max-width: 640px) {
+  .azad-modal-overlay {
+    padding: 10px;
+  }
+  .azad-modal-body {
+    padding: 16px 12px;
+  }
+  .azad-card-wrapper {
+    transform: scale(0.55);
+    margin-bottom: -240px;
+  }
+}

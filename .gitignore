@@ -1,0 +1,8 @@
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary helper scripts
+*.tmp
+sync-to-local.ps1
