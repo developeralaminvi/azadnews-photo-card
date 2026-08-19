@@ -37,7 +37,7 @@
   };
 
   /**
-   * Smart Highlight for Title text (matching Bengali and English reference designs)
+   * Smart Highlight for Title text
    */
   function formatTitleHighlight(rawTitle) {
     if (!rawTitle) return '';
@@ -94,7 +94,7 @@
 
       '<!-- Featured Image Frame -->',
       '<div class="azad-card-image-section">',
-        '<div class="azad-image-frame">',
+        '<div class="azad-image-frame" style="background-image: url(\'' + imgSrc + '\');">',
           '<img src="' + imgSrc + '" alt="Featured Photo" crossorigin="anonymous" />',
         '</div>',
       '</div>',
@@ -141,6 +141,45 @@
   }
 
   /**
+   * Dynamic Responsive Preview Scaling for Any Device
+   */
+  function adjustPreviewScale() {
+    var $modal = $('#azad_photo_card_modal');
+    if (!$modal.hasClass('active')) return;
+
+    var $previewArea = $('.azad-preview-area');
+    var $wrapper = $('.azad-card-wrapper');
+    if (!$previewArea.length || !$wrapper.length) return;
+
+    var availableWidth = $previewArea.width();
+    if (!availableWidth || availableWidth <= 0) {
+      availableWidth = $(window).width() - 40;
+    }
+
+    var baseSize = 600;
+    var scale = Math.min(1, availableWidth / baseSize);
+
+    if (scale < 1) {
+      $wrapper.css({
+        'transform': 'scale(' + scale + ')',
+        'transform-origin': 'top center',
+        'width': baseSize + 'px',
+        'height': (baseSize * scale) + 'px',
+        'margin-bottom': '0'
+      });
+      $previewArea.css('min-height', (baseSize * scale + 10) + 'px');
+    } else {
+      $wrapper.css({
+        'transform': 'none',
+        'width': baseSize + 'px',
+        'height': baseSize + 'px',
+        'margin-bottom': '0'
+      });
+      $previewArea.css('min-height', 'auto');
+    }
+  }
+
+  /**
    * Open Modal
    */
   function openModal() {
@@ -161,6 +200,11 @@
 
     $modal.show().addClass('active');
     $('body').css('overflow', 'hidden');
+
+    // Trigger dynamic scaling on open
+    setTimeout(function() {
+      adjustPreviewScale();
+    }, 50);
   }
 
   /**
@@ -176,15 +220,15 @@
   }
 
   /**
-   * Export & Download Card using html2canvas
+   * Export & Download Card using Isolated Offscreen Canvas
    */
   function downloadCard() {
     var $btn = $('#azad_download_card_btn');
     var $spinner = $btn.find('.azad-btn-spinner');
     var $text = $btn.find('.azad-btn-text');
-    var cardElement = document.getElementById('azad_photocard_element');
+    var sourceCard = document.getElementById('azad_photocard_element');
 
-    if (!cardElement) return;
+    if (!sourceCard) return;
 
     if (typeof html2canvas === 'undefined') {
       alert('html2canvas library is not loaded.');
@@ -193,52 +237,141 @@
 
     $btn.addClass('loading').prop('disabled', true);
     $spinner.show();
-    $text.text('Generating Card...');
+    $text.text('কার্ড প্রস্তুত হচ্ছে...');
 
-    // Ensure Bengali web fonts are ready before drawing to canvas
+    // 1. Create a detached offscreen container at exact 600x600, untransformed
+    var offscreenContainer = document.createElement('div');
+    offscreenContainer.id = 'azad_offscreen_export_wrap';
+    offscreenContainer.style.cssText = [
+      'position: fixed',
+      'left: -99999px',
+      'top: 0',
+      'width: 600px',
+      'height: 600px',
+      'min-width: 600px',
+      'min-height: 600px',
+      'max-width: 600px',
+      'max-height: 600px',
+      'overflow: hidden',
+      'margin: 0',
+      'padding: 0',
+      'transform: none !important',
+      'z-index: -9999',
+      'opacity: 1',
+      'pointer-events: none',
+      'box-sizing: border-box',
+      'background: #0b1e4f'
+    ].join(';');
+
+    // 2. Clone the photo card
+    var exportClone = sourceCard.cloneNode(true);
+    exportClone.id = 'azad_photocard_clone_for_export';
+    exportClone.style.cssText = [
+      'width: 600px !important',
+      'height: 600px !important',
+      'min-width: 600px !important',
+      'min-height: 600px !important',
+      'max-width: 600px !important',
+      'max-height: 600px !important',
+      'transform: none !important',
+      'margin: 0 !important',
+      'padding: 0 !important',
+      'box-sizing: border-box !important',
+      '--azad-title-size: ' + state.titleSize + 'px',
+      '--azad-line-height: ' + state.lineHeight,
+      '--azad-bottom-size: ' + state.bottomSize + 'px'
+    ].join(';');
+
+    // In the clone, ensure image frame uses background-image and hides img to fix html2canvas object-fit squish bug
+    var clonedImgFrame = exportClone.querySelector('.azad-image-frame');
+    if (clonedImgFrame) {
+      var clonedImg = clonedImgFrame.querySelector('img');
+      var imgSrc = (clonedImg && clonedImg.src) ? clonedImg.src : state.postImage;
+      if (imgSrc) {
+        clonedImgFrame.style.backgroundImage = 'url("' + imgSrc + '")';
+        clonedImgFrame.style.backgroundSize = 'cover';
+        clonedImgFrame.style.backgroundPosition = 'center center';
+        clonedImgFrame.style.backgroundRepeat = 'no-repeat';
+      }
+      if (clonedImg) {
+        clonedImg.style.display = 'none';
+      }
+    }
+
+    offscreenContainer.appendChild(exportClone);
+    document.body.appendChild(offscreenContainer);
+
+    // Wait for fonts to be ready
     var fontPromise = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
 
-    fontPromise.then(function() {
-      var scaleVal = parseInt((config.options && config.options.export_scale) || 2, 10);
+    // Wait for images in the clone
+    var images = exportClone.getElementsByTagName('img');
+    var imagePromises = [];
+    for (var i = 0; i < images.length; i++) {
+      if (images[i].style.display !== 'none' && !images[i].complete) {
+        imagePromises.push(new Promise(function(resolve) {
+          images[i].onload = resolve;
+          images[i].onerror = resolve;
+        }));
+      }
+    }
 
-      html2canvas(cardElement, {
-        scale: scaleVal,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        backgroundColor: null,
-        width: 600,
-        height: 600
-      }).then(function(canvas) {
-        try {
-          var imageURI = canvas.toDataURL('image/png');
-          var link = document.createElement('a');
-          var cleanName = (state.postTitle || 'azadnews-photocard')
-            .replace(/[^\w\s\u0980-\u09FF-]/g, '')
-            .substring(0, 40)
-            .trim()
-            .replace(/\s+/g, '-');
+    Promise.all([fontPromise].concat(imagePromises)).then(function() {
+      setTimeout(function() {
+        var scaleVal = parseInt((config.options && config.options.export_scale) || 2, 10);
+        if (scaleVal < 1 || scaleVal > 3) scaleVal = 2;
 
-          link.download = 'azadnews-' + cleanName + '.png';
-          link.href = imageURI;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } catch (e) {
-          console.error('Download error:', e);
-          alert('Could not generate download image. Error: ' + e.message);
-        }
+        html2canvas(exportClone, {
+          scale: scaleVal,
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+          backgroundColor: '#0b1e4f',
+          width: 600,
+          height: 600,
+          windowWidth: 600,
+          windowHeight: 600,
+          scrollX: 0,
+          scrollY: 0,
+          x: 0,
+          y: 0
+        }).then(function(canvas) {
+          try {
+            var imageURI = canvas.toDataURL('image/png');
+            var link = document.createElement('a');
+            var cleanName = (state.postTitle || 'azadnews-photocard')
+              .replace(/[^\w\s\u0980-\u09FF-]/g, '')
+              .substring(0, 40)
+              .trim()
+              .replace(/\s+/g, '-');
 
-        $btn.removeClass('loading').prop('disabled', false);
-        $spinner.hide();
-        $text.text('Download Photo Card');
-      }).catch(function(err) {
-        console.error('html2canvas render failed:', err);
-        $btn.removeClass('loading').prop('disabled', false);
-        $spinner.hide();
-        $text.text('Download Photo Card');
-        alert('Canvas generation failed. Please check image permissions.');
-      });
+            link.download = 'azadnews-' + (cleanName || 'photocard') + '.png';
+            link.href = imageURI;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } catch (e) {
+            console.error('Download error:', e);
+            alert('Could not generate download image. Error: ' + e.message);
+          }
+
+          if (offscreenContainer.parentNode) {
+            offscreenContainer.parentNode.removeChild(offscreenContainer);
+          }
+          $btn.removeClass('loading').prop('disabled', false);
+          $spinner.hide();
+          $text.text('Download Photo Card');
+        }).catch(function(err) {
+          console.error('html2canvas render failed:', err);
+          if (offscreenContainer.parentNode) {
+            offscreenContainer.parentNode.removeChild(offscreenContainer);
+          }
+          $btn.removeClass('loading').prop('disabled', false);
+          $spinner.hide();
+          $text.text('Download Photo Card');
+          alert('ফটো কার্ড তৈরিতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+        });
+      }, 60);
     });
   }
 
@@ -249,17 +382,14 @@
     var $btnWrapper = $('.azad-photo-card-trigger-wrapper');
     if (!$btnWrapper.length) return;
 
-    // Check if there is author / category meta bar (e.g. "Written by sarkarhost in Cardiology")
     var $meta = $('p:contains("Written by"), .entry-meta, .post-meta, .byline, .post-info, .entry-header').last();
     if ($meta.length) {
-      // If the button is not directly after the meta, place it right after meta
       if ($meta.next('.azad-photo-card-trigger-wrapper').length === 0) {
         $meta.after($btnWrapper.first());
         return;
       }
     }
 
-    // Otherwise, ensure it's at the very top of the content container
     var $contentContainer = $('.entry-content, .post-content, article .entry-content, .single-content, article .content, .single-post-content, .post-entry, article').first();
     if ($contentContainer.length) {
       if ($contentContainer.children().first()[0] !== $btnWrapper[0]) {
@@ -272,11 +402,14 @@
    * DOM Ready Bindings
    */
   $(document).ready(function() {
-    // Reposition button right above content / below meta and image
     placeButtonAboveContent();
 
     $(window).on('load', function() {
       placeButtonAboveContent();
+    });
+
+    $(window).on('resize orientationchange', function() {
+      adjustPreviewScale();
     });
 
     // Open Button Trigger
@@ -356,3 +489,4 @@
   });
 
 })(jQuery);
+

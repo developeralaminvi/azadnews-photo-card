@@ -3,7 +3,7 @@
  * Plugin Name: Azad News Photo Card
  * Plugin URI: https://azadnews-24.com/
  * Description: Azad News-24 এর জন্য প্রফেশনাল ফটো কার্ড জেনারেটর প্লাগইন। সিঙ্গেল পোস্ট থেকে সরাসরি সোশ্যাল মিডিয়া রেডি ফটো কার্ড তৈরি ও ডাউনলোড করুন।
- * Version: 1.0.1
+ * Version: 1.0.3
  * Author: Azad News 24 Team
  * Author URI: https://azadnews-24.com/
  * Text Domain: azadnews-photo-card
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-define('AZAD_PHOTO_CARD_VERSION', '1.0.1');
+define('AZAD_PHOTO_CARD_VERSION', '1.0.3');
 define('AZAD_PHOTO_CARD_PATH', plugin_dir_path(__FILE__));
 define('AZAD_PHOTO_CARD_URL', plugin_dir_url(__FILE__));
 define('AZAD_PHOTO_CARD_BASENAME', plugin_basename(__FILE__));

@@ -2,7 +2,7 @@
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org)
 [![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net)
-[![Version](https://img.shields.io/badge/Version-1.0.1-green.svg)](https://github.com/)
+[![Version](https://img.shields.io/badge/Version-1.0.3-green.svg)](https://github.com/)
 [![License](https://img.shields.io/badge/License-GPLv2-orange.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 **Azad News Photo Card** হলো একটি আধুনিক ও শক্তিশালী ওয়ার্ডপ্রেস প্লাগইন, যা যেকোনো অনলাইন নিউজ পোর্টাল বা ব্লগের সিঙ্গেল পোস্ট থেকে সরাসরি এক ক্লিকে ফেসবুক, টুইটার ও ইনস্টাগ্রামের জন্য দৃষ্টিনন্দন **সোশ্যাল মিডিয়া ফটো কার্ড (Social Media Photo Card)** তৈরি এবং ডাউনলোড করতে সাহায্য করে।

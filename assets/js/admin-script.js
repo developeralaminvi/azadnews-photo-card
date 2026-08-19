@@ -47,7 +47,7 @@
     if (!$stage.length) return;
 
     var formattedTitle = formatTitleHighlight(adminState.postTitle);
-    var logoMarkup = adminState.logoIconUrl ? '<img src="' + adminState.logoIconUrl + '" alt="Icon" />' : '<span class="azad-icon-text">আ</span>';
+    var logoMarkup = adminState.logoIconUrl ? '<img src="' + adminState.logoIconUrl + '" alt="Icon" crossorigin="anonymous" />' : '<span class="azad-icon-text">আ</span>';
 
     var html = '<div id="azad_admin_preview_card" class="azad-photocard-container" style="--azad-title-size:' + adminState.titleSize + 'px; --azad-line-height:' + adminState.lineHeight + '; --azad-bottom-size:' + adminState.bottomSize + 'px; font-family:' + adminState.fontFamily + ';">';
 
@@ -56,8 +56,8 @@
         '<span class="azad-date-pill">' + adminState.postDate + '</span>',
       '</div>',
       '<div class="azad-card-image-section">',
-        '<div class="azad-image-frame">',
-          '<img src="' + adminState.sampleImage + '" alt="Sample Photo" />',
+        '<div class="azad-image-frame" style="background-image: url(\'' + adminState.sampleImage + '\');">',
+          '<img src="' + adminState.sampleImage + '" alt="Sample Photo" crossorigin="anonymous" />',
         '</div>',
       '</div>',
       '<div class="azad-card-title-section">',
@@ -200,30 +200,72 @@
     // Download Test Button from Admin
     $('#azad_admin_download_btn').on('click', function(e) {
       e.preventDefault();
-      var card = document.getElementById('azad_admin_preview_card');
-      if (!card || typeof html2canvas === 'undefined') return;
+      var sourceCard = document.getElementById('azad_admin_preview_card');
+      if (!sourceCard || typeof html2canvas === 'undefined') return;
 
       var $btn = $(this);
       $btn.prop('disabled', true).text((adminData.i18n && adminData.i18n.downloading) || 'ডাউনলোড হচ্ছে...');
 
-      html2canvas(card, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        backgroundColor: null
-      }).then(function(canvas) {
-        var link = document.createElement('a');
-        link.download = 'azadnews-test-card.png';
-        link.href = canvas.toDataURL('image/png');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+      // Isolated offscreen container
+      var offscreenContainer = document.createElement('div');
+      offscreenContainer.style.cssText = 'position: fixed; left: -99999px; top: 0; width: 600px; height: 600px; min-width: 600px; min-height: 600px; max-width: 600px; max-height: 600px; overflow: hidden; margin: 0; padding: 0; transform: none !important; z-index: -9999; opacity: 1; pointer-events: none; background: #0b1e4f;';
 
-        $btn.prop('disabled', false).html('<span class="dashicons dashicons-download"></span> ' + ((adminData.i18n && adminData.i18n.download) || 'টেস্ট ফটো কার্ড ডাউনলোড করুন'));
-      }).catch(function(err) {
-        console.error(err);
-        $btn.prop('disabled', false).html('<span class="dashicons dashicons-download"></span> টেস্ট ফটো কার্ড ডাউনলোড করুন');
+      var exportClone = sourceCard.cloneNode(true);
+      exportClone.style.cssText = 'width: 600px !important; height: 600px !important; min-width: 600px !important; min-height: 600px !important; max-width: 600px !important; max-height: 600px !important; transform: none !important; margin: 0 !important; padding: 0 !important; box-sizing: border-box !important;';
+
+      var clonedImgFrame = exportClone.querySelector('.azad-image-frame');
+      if (clonedImgFrame) {
+        var clonedImg = clonedImgFrame.querySelector('img');
+        if (clonedImg && clonedImg.src) {
+          clonedImgFrame.style.backgroundImage = 'url("' + clonedImg.src + '")';
+          clonedImgFrame.style.backgroundSize = 'cover';
+          clonedImgFrame.style.backgroundPosition = 'center center';
+          clonedImgFrame.style.backgroundRepeat = 'no-repeat';
+          clonedImg.style.display = 'none';
+        }
+      }
+
+      offscreenContainer.appendChild(exportClone);
+      document.body.appendChild(offscreenContainer);
+
+      var fontPromise = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+
+      fontPromise.then(function() {
+        setTimeout(function() {
+          html2canvas(exportClone, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: false,
+            logging: false,
+            backgroundColor: '#0b1e4f',
+            width: 600,
+            height: 600,
+            windowWidth: 600,
+            windowHeight: 600,
+            scrollX: 0,
+            scrollY: 0,
+            x: 0,
+            y: 0
+          }).then(function(canvas) {
+            var link = document.createElement('a');
+            link.download = 'azadnews-test-card.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            if (offscreenContainer.parentNode) {
+              offscreenContainer.parentNode.removeChild(offscreenContainer);
+            }
+            $btn.prop('disabled', false).html('<span class="dashicons dashicons-download"></span> ' + ((adminData.i18n && adminData.i18n.download) || 'টেস্ট ফটো কার্ড ডাউনলোড করুন'));
+          }).catch(function(err) {
+            console.error(err);
+            if (offscreenContainer.parentNode) {
+              offscreenContainer.parentNode.removeChild(offscreenContainer);
+            }
+            $btn.prop('disabled', false).html('<span class="dashicons dashicons-download"></span> টেস্ট ফটো কার্ড ডাউনলোড করুন');
+          });
+        }, 50);
       });
     });
 
@@ -232,3 +274,4 @@
   });
 
 })(jQuery);
+
